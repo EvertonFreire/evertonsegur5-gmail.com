@@ -19,3 +19,7 @@ Após configurado o build, basta somente executar o compose docker para iniciar 
 ~~~
 # bash docker-compose up
 ~~~
+
+#
+####Visualização dos dados:
+Previamente o projeto terá somente os endpoints expostos, seguindo para uma implementação com VueJS com typescript.
