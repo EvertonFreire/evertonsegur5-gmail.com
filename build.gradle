@@ -1,0 +1,92 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		jcenter()
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.2.5.RELEASE' apply false
+	id "io.spring.dependency-management" version "1.0.9.RELEASE"
+	id "java"
+	id "idea"
+	id "com.diffplug.gradle.spotless" version "3.27.0"
+}
+
+allprojects {
+	group = 'br.com.project'
+	version = '0.0.1'
+
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		jcenter()
+	}
+
+	apply plugin: 'com.diffplug.gradle.spotless'
+	apply plugin: 'io.spring.dependency-management'
+
+	spotless {
+		java {
+			googleJavaFormat()
+		}
+		format "misc", {
+			target "**/*.gradle", "**/*.md", "**/.gitignore"
+
+			trimTrailingWhitespace()
+			indentWithTabs() // or spaces. Takes an integer argument if you don"t like 4
+			endWithNewline()
+		}
+	}
+	test {
+		useJUnitPlatform {
+			// includeEngines("junit-jupiter", "junit-vintage")
+			// excludeEngines("custom-engine")
+
+			// includeTags("fast")
+			excludeTags("slow")
+		}
+	}
+
+}
+
+subprojects {
+
+	apply plugin: 'java'
+	apply plugin: 'idea'
+	apply plugin: 'java-library'
+	apply plugin: 'io.spring.dependency-management'
+
+
+	tasks.withType(JavaCompile) {
+		options.encoding = "UTF-8"
+	}
+
+	sourceCompatibility = JavaVersion.VERSION_11
+	targetCompatibility = JavaVersion.VERSION_11
+
+	configurations {
+		developmentOnly
+		runtimeClasspath {
+			extendsFrom developmentOnly
+		}
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+
+	dependencyManagement {
+		imports {
+			mavenBom "org.keycloak.bom:keycloak-adapter-bom:3.3.0.Final"
+		}
+	}
+
+	dependencies {
+		testImplementation("org.junit.jupiter:junit-jupiter:5.6.1")
+	}
+
+	test {
+		useJUnitPlatform()
+	}
+}

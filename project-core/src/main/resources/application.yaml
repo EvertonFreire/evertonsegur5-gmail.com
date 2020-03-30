@@ -1,0 +1,44 @@
+debug: true
+spring:
+  datasource:
+    platform: postgresql
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://10.5.0.4:5432/keycloak
+    username: keycloak
+    password: password
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+    open-in-view: false
+    generate-ddl: true
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  port: 8080
+
+keycloak:
+  allow-any-hostname: true
+  realm: SpringBootApplication
+  resource: login-application
+  auth-server-url: http://10.5.0.3:8081/auth/
+  ssl-required: external
+  use-resource-role-mappings: true
+  securityConstraints:
+    - authRoles:
+        - admin
+        - user
+    - securityCollections:
+        - name: insecure stuff
+        - patterns:
+            - /insecure
+    - authRoles:
+        - admin
+    - securityCollections:
+        - name: admin stuff
+        - patterns:
+            - /admin
+  public-client: true

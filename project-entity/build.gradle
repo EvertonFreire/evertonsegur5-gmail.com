@@ -1,0 +1,7 @@
+dependencies {
+	implementation "org.springframework.boot:spring-boot:${pluginSpringBootVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${pluginSpringBootVersion}"
+	compileOnly "javax.validation:validation-api:${libJavaxValidationVersion}"
+	compileOnly "org.projectlombok:lombok:${libLombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${libLombokVersion}"
+}

@@ -1,0 +1,5 @@
+dependencies {
+	compileOnly "javax.validation:validation-api:${libJavaxValidationVersion}"
+	compileOnly "org.projectlombok:lombok:${libLombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${libLombokVersion}"
+}

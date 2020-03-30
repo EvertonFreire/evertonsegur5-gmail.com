@@ -1,0 +1,59 @@
+version: '3.4'
+
+volumes:
+  postgres_data:
+    driver: local
+
+services:
+  postgres:
+    image: postgres
+    container_name: database
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.4
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: project
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: authSso
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      ## first time access uncomment bellow
+#      KEYCLOAK_USER: admin
+#      KEYCLOAK_PASSWORD: Pa55w0rd
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.3
+    ports:
+      - 8081:8080
+    depends_on:
+      - postgres
+  spring:
+    build: Dockerfiles/app/
+    container_name: springApp
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.2
+    ports:
+      - 8080:8080
+    volumes:
+      - ./project-core/build/libs:/tmp/
+    depends_on:
+      - postgres
+      - keycloak
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16

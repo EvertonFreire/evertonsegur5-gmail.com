@@ -1,0 +1,5 @@
+rootProject.name = 'project'
+
+include 'project-entity'
+include 'project-core'
+include 'project-dto'
